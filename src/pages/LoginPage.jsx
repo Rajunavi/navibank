@@ -57,9 +57,11 @@ const LoginPage = () => {
             alt="Your Company"
           />
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            {/* sign in to your account to change in Login page */}
             Login to your account
           </h2>
         </div>
+        
         <ToastContainer
         position="top-center"
         autoClose={5000}
