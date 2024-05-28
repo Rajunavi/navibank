@@ -4,7 +4,10 @@ import {
   } from '@heroicons/react/24/outline';
 import { Disclosure, Menu, Transition} from '@headlessui/react';
 import logo from "../assets/bank_logo.png"
-import { Link, Outlet, useLocation, useParams } from 'react-router-dom';
+import { Link, Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCustomers } from '../redux/reducers/customerReducers';
+import { useLoacalStorage } from '../utils/useLoacalStorage';
 
 const user = {
     name: 'Tom Cook',
@@ -22,7 +25,7 @@ const user = {
   const userNavigation = [
     { name: 'Your Profile', href: '#' },
     { name: 'Settings', href: '#' },
-    { name: 'Sign out', href: '#' },
+    { name: 'Sign out', href: '/login' },
   ]
   
   function classNames(...classes) {
@@ -32,6 +35,9 @@ const user = {
 function NavBar() {
     const {pathname} = useLocation();
     const [navigation, setNavigation] = useState(nav)
+    const dispatch = useDispatch()
+
+    const [storedValue, removeVal] = useLoacalStorage('token')
 
   useEffect(() => {
     setNavigation(nav => {
@@ -42,10 +48,16 @@ function NavBar() {
        return up
     })
   },[pathname])
+
+  useEffect(() => {
+    dispatch(getCustomers())
+  },[])
+
+  if(!storedValue) return <Navigate to='/login' replace />
   return (
     <>
-    <div className="min-h-full">
-        <div className='w-full fixed mt-0 ml-0 z-10'>
+    <div className="w-full fixed m-0 z-10">
+        <div className='w-full'>
         <Disclosure as="nav" className="bg-yellow-500 ">
           {({ open }) => (
             <>
@@ -54,7 +66,7 @@ function NavBar() {
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
                       <img
-                        className="h-10 w-18"
+                        className="h-10 w-18 cursor-pointer"
                         // src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
                         src={logo}
                         alt="Your Company"
@@ -66,6 +78,7 @@ function NavBar() {
                           <Link
                             key={item.name}
                             to={item.href}
+                            replace
                             className={classNames(
                               item.current
                                 ? 'bg-yellow-400 text-white'
@@ -119,6 +132,10 @@ function NavBar() {
                                       active ? 'bg-gray-100' : '',
                                       'block px-4 py-2 text-sm text-gray-700'
                                     )}
+                                    onClick={item.name === "Sign out" ?() => {
+                                      localStorage.removeItem('token')
+
+                                    } : () => {}}
                                   >
                                     {item.name}
                                   </a>
@@ -186,6 +203,11 @@ function NavBar() {
                         key={item.name}
                         as="a"
                         href={item.href}
+                        onClick={item.name === "Sign out" ?() => {
+                          // removeVal('token')
+                          localStorage.removeItem('token')
+
+                        } : () => {}}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >
                         {item.name}
@@ -204,8 +226,8 @@ function NavBar() {
           </div>
         </header> */}
         </div>
-        <Outlet />
       </div>
+        <Outlet />
     </>
   )
 }

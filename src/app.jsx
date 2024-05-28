@@ -5,6 +5,10 @@ import Home from './pages/Home'
 import CreateAccout from './pages/CreateAccout'
 import AllCustomers from './pages/AllCustomers'
 import Transaction from './pages/Transaction'
+import CustomerDetails from './pages/CustomerDetails'
+import About from './pages/About'
+import LoginPage from './pages/LoginPage'
+import Register from './pages/Register'
 
 const router = createBrowserRouter([
   {
@@ -26,8 +30,20 @@ const router = createBrowserRouter([
       {
         path:"transaction",
         element:<Transaction />
+      },
+      {
+        path:"about",
+        element:<About />
       }
     ]
+  },
+  {
+    path:"login",
+    element:<LoginPage/>
+  },
+  {
+    path:"register",
+    element:<Register/>
   }
 ])
 

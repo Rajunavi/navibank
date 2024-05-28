@@ -12,18 +12,28 @@ const initialState = {
     loading: false,
     customers: [],
     error: null,
+    customer: null
 }
 
 
 const customerSlice = createSlice({
     name:'customers',
     initialState,
+    reducers:{
+        addCustomer: (state, action) => {
+            state.customer = state.customers.find(item => item.id === action.payload)
+        },
+        updateCustomer:(state, action) => {
+            state.customer = {...state.customer, accBalance:action.payload}
+        }
+    },
     extraReducers: builder => {
         builder.addCase(getCustomers.pending, state => {
             state.loading = true;
         });
         builder.addCase(getCustomers.fulfilled, (state, action) => {
             state.customers = action.payload?.map((item) => ({
+                ...item,
                 name: `${item.firstName} ${item.lastName}`,
                 email: item.email,
                 mobile:item.mobileNo,
@@ -42,4 +52,4 @@ const customerSlice = createSlice({
 });
 
 export default customerSlice.reducer;
-// export const {loadCustomers} = customerReducer.actions
+export const { addCustomer, updateCustomer } = customerSlice.actions

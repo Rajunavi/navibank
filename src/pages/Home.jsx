@@ -8,6 +8,7 @@ function Home() {
           <Typical
         steps={['Welcome to Navi Bank!..', 5000, 'Explore the features..', 5000, 'Get started now!..', 5000]}
         loop={Infinity}
+        
         className="text-6xl text-center text-blue-800 font-bold mt-32"
       />
           </div>
